@@ -1,6 +1,6 @@
 %h1= t("profile.title")
 
-/ === Пользователь ===
+/ Пользователь
 %p
   %strong= t("profile.email") + ": "
   = @user.email
@@ -9,12 +9,12 @@
   %strong= t("profile.ratings_count") + ": "
   = @ratings.count
 
-/ === Gravatar ===
+/ Gravatar
 %div
   - hash = Digest::MD5.hexdigest(@user.email.strip.downcase)
   %img{ src: "https://www.gravatar.com/avatar/#{hash}", width: 100, alt: "avatar" }
 
-/ === Блок "близкие к среднему оценки" ===
+/ Блок "близкие к среднему оценки"
 - if @good_ratings.any?
   %h3= t("profile.good_ratings")
 

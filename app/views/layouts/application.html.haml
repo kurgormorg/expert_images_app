@@ -16,7 +16,7 @@
       %nav
         = stylesheet_link_tag "application", "data-turbo-track": "reload"
 
-        / === Основное меню ===
+        / Основное меню
         = link_to t("menu.home"), root_path
         = link_to t("menu.about"), about_path
         = link_to t("menu.help"), help_path
@@ -32,23 +32,23 @@
           = link_to t("auth.login"), new_user_session_path
           = link_to t("auth.register"), new_user_registration_path
 
-        / === Переключатель языка ===
+        / Переключатель языка
         %span.lang-switch
           = link_to "RU", url_for(locale: :ru)
           |
           = link_to "EN", url_for(locale: :en)
 
-        / === уведомления ===
+        / уведомления 
         - if notice
           .alert.alert-success= notice
 
         - if alert
           .alert.alert-danger= alert
 
-    / === основной контент ===
+    / основной контент
     .container
       = yield
 
-    / === footer ===
+    / footer 
     %footer
       %p © Монастырев Антон
