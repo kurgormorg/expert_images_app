@@ -1,54 +1,47 @@
 !!!
-%html
+%html{ lang: I18n.locale }
   %head
     %title Expert Images App
-
+    %meta{ name: "viewport", content: "width=device-width,initial-scale=1" }
     = csrf_meta_tags
     = csp_meta_tag
-
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
-    = javascript_include_tag "application", "data-turbo-track": "reload"
+    = javascript_importmap_tags
 
   %body
-    = stylesheet_link_tag "application", "data-turbo-track": "reload"
-    %header
-      = stylesheet_link_tag "application", "data-turbo-track": "reload"
-      %nav
-        = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    %header.site-header
+      %nav.main-nav
+        .nav-links
+          = link_to t("menu.home"), root_path
+          = link_to t("menu.about"), about_path
+          = link_to t("menu.help"), help_path
 
-        / Основное меню
-        = link_to t("menu.home"), root_path
-        = link_to t("menu.about"), about_path
-        = link_to t("menu.help"), help_path
+          - if user_signed_in?
+            = link_to t("menu.profile"), user_path
+            = button_to t("auth.logout"),
+                        destroy_user_session_path,
+                        method: :delete,
+                        form: { data: { turbo: false }, class: "logout-form" },
+                        class: "link-button"
+          - else
+            = link_to t("auth.login"), new_user_session_path
+            = link_to t("auth.register"), new_user_registration_path
 
-        - if user_signed_in?
-          = link_to t("menu.profile"), user_path(current_user)
-          = button_to t("auth.logout"),
-                      destroy_user_session_path,
-                      method: :delete,
-                      form: { data: { turbo: false } }
+        = form_with url: url_for, method: :get, local: true, class: "locale-form" do
+          - request.query_parameters.except("locale").each do |key, value|
+            = hidden_field_tag key, value
+          = label_tag :locale, t("menu.language"), class: "sr-only"
+          = select_tag :locale,
+            options_for_select([[t("menu.russian"), "ru"], [t("menu.english"), "en"]], I18n.locale),
+            onchange: "this.form.submit();"
 
-        - else
-          = link_to t("auth.login"), new_user_session_path
-          = link_to t("auth.register"), new_user_registration_path
+    - if notice
+      .flash.flash-success= notice
+    - if alert
+      .flash.flash-danger= alert
 
-        / Переключатель языка
-        %span.lang-switch
-          = link_to "RU", url_for(locale: :ru)
-          |
-          = link_to "EN", url_for(locale: :en)
-
-        / уведомления 
-        - if notice
-          .alert.alert-success= notice
-
-        - if alert
-          .alert.alert-danger= alert
-
-    / основной контент
-    .container
+    %main.container
       = yield
 
-    / footer 
-    %footer
-      %p © Монастырев Антон
+    %footer.site-footer
+      %p= t("footer.author")

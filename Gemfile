@@ -68,6 +68,4 @@ end
 gem 'haml-rails'
 
 gem 'devise'
-gem "cssbundling-rails", "~> 1.4"
-
 gem "dartsass-rails", "~> 0.5.1"

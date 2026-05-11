@@ -1,32 +1,102 @@
 ru:
   main:
-    title: "Главная страница"
-    theme: "Тема:"
+    title: "Экспертная оценка изображений"
+    subtitle: "Выберите тему и изображение, поставьте оценку и сравните результат со средним мнением экспертов."
+    theme: "Тема"
+    image: "Изображение"
     rating: "Оценка"
     average: "Средняя оценка"
-    no_ratings: "Нет оценок"
+    no_ratings: "Оценок пока нет"
+    no_images: "В этой теме нет изображений"
     users_ratings: "Оценки пользователей"
     rate: "Оценить"
-    back: "← Назад"
-    next: "Вперёд →"
+    rating_saved: "Оценка сохранена. Новая средняя оценка"
+    rating_error: "Не удалось сохранить оценку"
+    back: "Назад"
+    next: "Вперед"
+    login_to_rate_html: "Чтобы поставить оценку, %{link}."
 
   menu:
     home: "Главная"
     about: "О проекте"
     help: "Помощь"
     profile: "Моя страница"
+    language: "Язык"
+    russian: "Русский"
+    english: "English"
 
   auth:
     login: "Вход"
     register: "Регистрация"
     logout: "Выйти"
+    forgot_password: "Забыли пароль?"
+    minimum_password_length:
+      one: "Минимум %{count} символ"
+      few: "Минимум %{count} символа"
+      many: "Минимум %{count} символов"
+      other: "Минимум %{count} символа"
 
   profile:
     title: "Моя страница"
+    name: "Имя пользователя"
     email: "Email"
+    avatar_alt: "Аватар пользователя"
     ratings_count: "Количество оценок"
-    good_ratings: "Ваши оценки, близкие к среднему"
-    image: "Изображение"
+    good_ratings: "Оценки, близкие к среднему значению"
+    image: "Наименование изображения"
+    preview: "Изображение"
     your_rating: "Ваша оценка"
-    average: "Средняя"
+    average: "Средняя оценка"
     no_good_ratings: "Ваши оценки существенно расходятся с мнением экспертного сообщества"
+
+  about:
+    title: "О проекте"
+    text: "Приложение демонстрирует сбор экспертных оценок изображений с регистрацией пользователей, PostgreSQL, Rails-моделями, Haml-представлениями, Sass-стилями, локализацией и AJAX API."
+
+  help:
+    title: "Помощь"
+    text: "На главной странице выберите тему и изображение, затем перемещайте шкалу оценки от 1 до 5 и сохраните результат. После входа доступна страница с персональной статистикой."
+
+  footer:
+    author: "© Монастырев Антон"
+
+  activerecord:
+    models:
+      user: "Пользователь"
+      image: "Изображение"
+      theme: "Тема"
+      rating: "Оценка"
+    attributes:
+      user:
+        email: "Email"
+        password: "Пароль"
+        password_confirmation: "Подтверждение пароля"
+        remember_me: "Запомнить меня"
+      rating:
+        value: "Оценка"
+      image:
+        title: "Название"
+        file_path: "Файл"
+      theme:
+        name: "Название"
+
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      blank: "не может быть пустым"
+      invalid: "имеет неверный формат"
+      taken: "уже используется"
+      too_short:
+        one: "слишком короткий, минимум %{count} символ"
+        few: "слишком короткий, минимум %{count} символа"
+        many: "слишком короткий, минимум %{count} символов"
+        other: "слишком короткий, минимум %{count} символа"
+      confirmation: "не совпадает со значением поля «%{attribute}»"
+      not_a_number: "должна быть числом"
+      not_an_integer: "должна быть целым числом"
+      inclusion: "имеет недопустимое значение"
+      not_saved:
+        one: "%{resource} не сохранен из-за %{count} ошибки:"
+        few: "%{resource} не сохранен из-за %{count} ошибок:"
+        many: "%{resource} не сохранен из-за %{count} ошибок:"
+        other: "%{resource} не сохранен из-за %{count} ошибки:"

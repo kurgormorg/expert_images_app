@@ -1,32 +1,79 @@
 en:
   main:
-    title: "Main page"
+    title: "Expert image rating"
+    subtitle: "Choose a theme and image, submit a score, and compare it with the average expert result."
     theme: "Theme"
+    image: "Image"
     rating: "Rating"
     average: "Average rating"
-    no_ratings: "No ratings"
+    no_ratings: "No ratings yet"
+    no_images: "There are no images in this theme"
     users_ratings: "User ratings"
     rate: "Rate"
-    back: "← Back"
-    next: "Next →"
+    rating_saved: "Rating saved. New average rating"
+    rating_error: "Could not save rating"
+    back: "Back"
+    next: "Next"
+    login_to_rate_html: "Please %{link} to submit a rating."
 
   menu:
     home: "Home"
     about: "About"
     help: "Help"
     profile: "My page"
+    language: "Language"
+    russian: "Русский"
+    english: "English"
 
   auth:
     login: "Login"
     register: "Sign up"
     logout: "Logout"
+    forgot_password: "Forgot your password?"
+    minimum_password_length:
+      one: "%{count} character minimum"
+      other: "%{count} characters minimum"
 
   profile:
     title: "My page"
+    name: "User name"
     email: "Email"
+    avatar_alt: "User avatar"
     ratings_count: "Ratings count"
-    good_ratings: "Ratings close to average"
-    image: "Image"
+    good_ratings: "Ratings close to the average"
+    image: "Image title"
+    preview: "Image"
     your_rating: "Your rating"
-    average: "Average"
-    no_good_ratings: "Your ratings significantly differ from expert community"
+    average: "Average rating"
+    no_good_ratings: "Your ratings significantly differ from the expert community opinion"
+
+  about:
+    title: "About"
+    text: "The app demonstrates expert image ratings with user registration, PostgreSQL, Rails models, Haml views, Sass styles, localization, and an AJAX API."
+
+  help:
+    title: "Help"
+    text: "On the main page, choose a theme and image, move the rating scale from 1 to 5, and save the result. After logging in, your personal statistics page becomes available."
+
+  footer:
+    author: "© Anton Monastyrev"
+
+  activerecord:
+    models:
+      user: "User"
+      image: "Image"
+      theme: "Theme"
+      rating: "Rating"
+    attributes:
+      user:
+        email: "Email"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+        remember_me: "Remember me"
+      rating:
+        value: "Rating"
+      image:
+        title: "Title"
+        file_path: "File"
+      theme:
+        name: "Name"

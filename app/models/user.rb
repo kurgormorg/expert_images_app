@@ -5,4 +5,8 @@ class User < ApplicationRecord
   has_many :images, through: :ratings
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  def display_name
+    email.to_s.split("@").first.presence || "user"
+  end
 end

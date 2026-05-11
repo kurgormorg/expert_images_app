@@ -1,100 +1,81 @@
-%h1= t("main.title")
+%section.page-heading
+  %h1= t("main.title")
+  %p= t("main.subtitle")
 
-/ === Переключение темы ===
-= form_with url: root_path, method: :get, local: true do
-  %label= t("main.theme")
-  = select_tag :theme_id,
-    options_from_collection_for_select(@themes, :id, :name, @theme&.id),
-    onchange: "this.form.submit();"
+%section.work-area
+  = form_with url: root_path, method: :get, local: true, class: "selector-form" do
+    .field
+      = label_tag :theme_id, t("main.theme")
+      = select_tag :theme_id,
+        options_from_collection_for_select(@themes, :id, :name, @theme&.id),
+        onchange: "this.form.submit();"
 
-/ === Изображение ===
-- if @image
-  %h2= @image.title
+    .field
+      = label_tag :image_id, t("main.image")
+      = select_tag :image_id,
+        options_from_collection_for_select(@images, :id, :title, @image&.id),
+        include_blank: @images.empty? ? t("main.no_images") : false,
+        onchange: "this.form.submit();"
 
-  = image_tag @image.file_path, width: 700
+  - if @image
+    .image-panel
+      .image-preview
+        %h2= @image.title
+        = image_tag @image.file_path, alt: @image.title
 
-  %p
-    = t("main.average") + ": "
-    = @image.average_rating || t("main.no_ratings")
+      .rating-panel
+        %p.average-line
+          %strong= t("main.average") + ": "
+          %span#average-rating= @image.average_rating || t("main.no_ratings")
 
-/ === Навигация по изображениям ===
-- if @images.any?
-  %div
-    - if @index.to_i > 0
-      = link_to t("main.back"),
-        root_path(theme_id: @theme.id, index: @index - 1)
+        .pager
+          - if @index.to_i > 0
+            = link_to t("main.back"), root_path(theme_id: @theme.id, index: @index - 1), class: "button secondary"
+          - else
+            %span.button.secondary.disabled= t("main.back")
 
-    - if @index.to_i < @images.size - 1
-      = link_to t("main.next"),
-        root_path(theme_id: @theme.id, index: @index + 1)
+          - if @index.to_i < @images.size - 1
+            = link_to t("main.next"), root_path(theme_id: @theme.id, index: @index + 1), class: "button secondary"
+          - else
+            %span.button.secondary.disabled= t("main.next")
 
-/ === Форма оценки ===
-- if user_signed_in? && @image
-  = form_with url: api_ratings_path,
-              method: :post,
-              data: { turbo: false },
-              id: "rating-form" do
+        - if user_signed_in?
+          = form_with url: api_ratings_path,
+                      method: :post,
+                      data: { turbo: false, success_message: t("main.rating_saved"), error_message: t("main.rating_error") },
+                      id: "rating-form",
+                      class: "rating-form" do
+            = hidden_field_tag :image_id, @image.id, id: "image_id"
 
-    = hidden_field_tag :image_id, @image.id
+            = label_tag "rating-input", t("main.rating")
+            = range_field_tag :value, 3, min: 1, max: 5, step: 1, id: "rating-input"
+            .rating-scale
+              %span 1
+              %span 2
+              %span 3
+              %span 4
+              %span 5
+            = submit_tag t("main.rate"), id: "rate-btn", class: "button"
 
-    %label= t("main.rating")
-    %br
+          %p#rating-result.status-line{ role: "status" }
+        - else
+          %p.auth-hint= t("main.login_to_rate_html", link: link_to(t("auth.login"), new_user_session_path))
 
-    = range_field_tag :value, 3, min: 1, max: 5, id: "rating-input"
-
-    %div
-      %small 1 &nbsp &nbsp &nbsp; 2 &nbsp &nbsp &nbsp; 3 &nbsp &nbsp &nbsp; 4 &nbsp &nbsp &nbsp; 5
-
-    %br
-    = submit_tag t("main.rate"), id: "rate-btn"
-
-  %p#rating-result
-
-/ === Таблица оценок ===
-- if @ratings.any?
-  %h3= t("main.users_ratings")
-
-  %table
-    %thead
-      %tr
-        %th Email
-        %th= t("main.rating")
-
-    %tbody
-      - @ratings.each do |rating|
-        %tr
-          %td= rating.user.email
-          %td= rating.value
-- else
-  %p= t("main.no_ratings")
-
-:javascript
-  document.addEventListener("submit", function (e) {
-    const form = e.target;
-
-    if (form.id !== "rating-form") return;
-
-    e.preventDefault();
-
-    const value = document.getElementById("rating-input").value;
-    const imageId = document.getElementById("image-id").value;
-
-    fetch("/api/ratings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
-      },
-      body: JSON.stringify({
-        image_id: imageId,
-        value: value
-      })
-    })
-    .then(r => r.json())
-    .then(data => {
-      document.getElementById("rating-result").innerText =
-        "Новая средняя оценка: " + data.average;
-    });
-
-    return false;
-  });
+    %section.results-section
+      %h3= t("main.users_ratings")
+      %table.results-table
+        %thead
+          %tr
+            %th= t("profile.email")
+            %th= t("main.rating")
+        %tbody#ratings-table-body
+          - if @ratings.any?
+            - @ratings.each do |rating|
+              %tr{ data: { user_id: rating.user_id } }
+                %td= rating.user.email
+                %td= rating.value
+          - else
+            %tr#ratings-empty-row
+              %td{ colspan: 2 }= t("main.no_ratings")
+  - else
+    .empty-state= t("main.no_images")

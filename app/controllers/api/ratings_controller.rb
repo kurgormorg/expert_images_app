@@ -12,7 +12,15 @@ class Api::RatingsController < ApplicationController
 
     render json: {
       success: true,
-      average: rating.image.average_rating
+      average: rating.image.average_rating.to_f,
+      user_id: rating.user_id,
+      user_email: rating.user.email,
+      value: rating.value
     }
+  rescue ActiveRecord::RecordInvalid => error
+    render json: {
+      success: false,
+      errors: error.record.errors.full_messages
+    }, status: :unprocessable_entity
   end
 end

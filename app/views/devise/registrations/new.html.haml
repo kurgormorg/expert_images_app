@@ -1,0 +1,23 @@
+%section.auth-page
+  %h1= t("auth.register")
+
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f|
+    = render "devise/shared/error_messages", resource: resource
+
+    .field
+      = f.label :email
+      = f.email_field :email, autofocus: true, autocomplete: "email"
+
+    .field
+      = f.label :password
+      - if @minimum_password_length
+        %small= t("auth.minimum_password_length", count: @minimum_password_length)
+      = f.password_field :password, autocomplete: "new-password"
+
+    .field
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation, autocomplete: "new-password"
+
+    = f.submit t("auth.register"), class: "button"
+
+  = render "devise/shared/links"

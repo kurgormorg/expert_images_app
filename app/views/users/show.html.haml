@@ -1,36 +1,39 @@
-%h1= t("profile.title")
+%section.page-heading
+  %h1= t("profile.title")
 
-/ Пользователь
-%p
-  %strong= t("profile.email") + ": "
-  = @user.email
+%section.profile-summary
+  .avatar-block
+    - hash = Digest::MD5.hexdigest(@user.email.strip.downcase)
+    %img.avatar{ src: "https://www.gravatar.com/avatar/#{hash}", width: 120, height: 120, alt: t("profile.avatar_alt") }
 
-%p
-  %strong= t("profile.ratings_count") + ": "
-  = @ratings.count
+  .profile-facts
+    %p
+      %strong= t("profile.name") + ": "
+      = @user.display_name
+    %p
+      %strong= t("profile.email") + ": "
+      = @user.email
+    %p
+      %strong= t("profile.ratings_count") + ": "
+      = @ratings.count
 
-/ Gravatar
-%div
-  - hash = Digest::MD5.hexdigest(@user.email.strip.downcase)
-  %img{ src: "https://www.gravatar.com/avatar/#{hash}", width: 100, alt: "avatar" }
+%section.results-section
+  %h2= t("profile.good_ratings")
 
-/ Блок "близкие к среднему оценки"
-- if @good_ratings.any?
-  %h3= t("profile.good_ratings")
-
-  %table
-    %thead
-      %tr
-        %th= t("profile.image")
-        %th= t("profile.your_rating")
-        %th= t("profile.average")
-
-    %tbody
-      - @good_ratings.each do |rating|
+  - if @good_ratings.any?
+    %table.results-table
+      %thead
         %tr
-          %td= rating.image.title
-          %td= rating.value
-          %td= rating.image.average_rating
-
-- else
-  %p= t("profile.no_good_ratings")
+          %th= t("profile.image")
+          %th= t("profile.preview")
+          %th= t("profile.your_rating")
+          %th= t("profile.average")
+      %tbody
+        - @good_ratings.each do |rating|
+          %tr
+            %td= rating.image.title
+            %td= image_tag rating.image.file_path, alt: rating.image.title, class: "thumb"
+            %td= rating.value
+            %td= rating.image.average_rating
+  - else
+    %p.empty-state= t("profile.no_good_ratings")

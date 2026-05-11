@@ -1,11 +1,9 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+forest:
+  title: Forest
+  file_path: forest.jpg
+  theme_id: <%= ActiveRecord::FixtureSet.identify(:nature) %>
 
-one:
-  title: MyString
-  file_path: MyString
-  theme: MyString
-
-two:
-  title: MyString
-  file_path: MyString
-  theme: MyString
+city:
+  title: City
+  file_path: city.jpg
+  theme_id: <%= ActiveRecord::FixtureSet.identify(:city) %>
