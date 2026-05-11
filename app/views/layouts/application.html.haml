@@ -1,0 +1,54 @@
+!!!
+%html
+  %head
+    %title Expert Images App
+
+    = csrf_meta_tags
+    = csp_meta_tag
+
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_include_tag "application", "data-turbo-track": "reload"
+
+  %body
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    %header
+      = stylesheet_link_tag "application", "data-turbo-track": "reload"
+      %nav
+        = stylesheet_link_tag "application", "data-turbo-track": "reload"
+
+        / === Основное меню ===
+        = link_to t("menu.home"), root_path
+        = link_to t("menu.about"), about_path
+        = link_to t("menu.help"), help_path
+
+        - if user_signed_in?
+          = link_to t("menu.profile"), user_path(current_user)
+          = button_to t("auth.logout"),
+                      destroy_user_session_path,
+                      method: :delete,
+                      form: { data: { turbo: false } }
+
+        - else
+          = link_to t("auth.login"), new_user_session_path
+          = link_to t("auth.register"), new_user_registration_path
+
+        / === Переключатель языка ===
+        %span.lang-switch
+          = link_to "RU", url_for(locale: :ru)
+          |
+          = link_to "EN", url_for(locale: :en)
+
+        / === уведомления ===
+        - if notice
+          .alert.alert-success= notice
+
+        - if alert
+          .alert.alert-danger= alert
+
+    / === основной контент ===
+    .container
+      = yield
+
+    / === footer ===
+    %footer
+      %p © Монастырев Антон

@@ -1,0 +1,36 @@
+%h1= t("profile.title")
+
+/ === Пользователь ===
+%p
+  %strong= t("profile.email") + ": "
+  = @user.email
+
+%p
+  %strong= t("profile.ratings_count") + ": "
+  = @ratings.count
+
+/ === Gravatar ===
+%div
+  - hash = Digest::MD5.hexdigest(@user.email.strip.downcase)
+  %img{ src: "https://www.gravatar.com/avatar/#{hash}", width: 100, alt: "avatar" }
+
+/ === Блок "близкие к среднему оценки" ===
+- if @good_ratings.any?
+  %h3= t("profile.good_ratings")
+
+  %table
+    %thead
+      %tr
+        %th= t("profile.image")
+        %th= t("profile.your_rating")
+        %th= t("profile.average")
+
+    %tbody
+      - @good_ratings.each do |rating|
+        %tr
+          %td= rating.image.title
+          %td= rating.value
+          %td= rating.image.average_rating
+
+- else
+  %p= t("profile.no_good_ratings")

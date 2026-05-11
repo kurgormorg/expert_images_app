@@ -1,0 +1,100 @@
+%h1= t("main.title")
+
+/ === Переключение темы ===
+= form_with url: root_path, method: :get, local: true do
+  %label= t("main.theme")
+  = select_tag :theme_id,
+    options_from_collection_for_select(@themes, :id, :name, @theme&.id),
+    onchange: "this.form.submit();"
+
+/ === Изображение ===
+- if @image
+  %h2= @image.title
+
+  = image_tag @image.file_path, width: 700
+
+  %p
+    = t("main.average") + ": "
+    = @image.average_rating || t("main.no_ratings")
+
+/ === Навигация по изображениям ===
+- if @images.any?
+  %div
+    - if @index.to_i > 0
+      = link_to t("main.back"),
+        root_path(theme_id: @theme.id, index: @index - 1)
+
+    - if @index.to_i < @images.size - 1
+      = link_to t("main.next"),
+        root_path(theme_id: @theme.id, index: @index + 1)
+
+/ === Форма оценки ===
+- if user_signed_in? && @image
+  = form_with url: api_ratings_path,
+              method: :post,
+              data: { turbo: false },
+              id: "rating-form" do
+
+    = hidden_field_tag :image_id, @image.id
+
+    %label= t("main.rating")
+    %br
+
+    = range_field_tag :value, 3, min: 1, max: 5, id: "rating-input"
+
+    %div
+      %small 1 &nbsp &nbsp &nbsp; 2 &nbsp &nbsp &nbsp; 3 &nbsp &nbsp &nbsp; 4 &nbsp &nbsp &nbsp; 5
+
+    %br
+    = submit_tag t("main.rate"), id: "rate-btn"
+
+  %p#rating-result
+
+/ === Таблица оценок ===
+- if @ratings.any?
+  %h3= t("main.users_ratings")
+
+  %table
+    %thead
+      %tr
+        %th Email
+        %th= t("main.rating")
+
+    %tbody
+      - @ratings.each do |rating|
+        %tr
+          %td= rating.user.email
+          %td= rating.value
+- else
+  %p= t("main.no_ratings")
+
+:javascript
+  document.addEventListener("submit", function (e) {
+    const form = e.target;
+
+    if (form.id !== "rating-form") return;
+
+    e.preventDefault();
+
+    const value = document.getElementById("rating-input").value;
+    const imageId = document.getElementById("image-id").value;
+
+    fetch("/api/ratings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        image_id: imageId,
+        value: value
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("rating-result").innerText =
+        "Новая средняя оценка: " + data.average;
+    });
+
+    return false;
+  });

@@ -1,0 +1,32 @@
+ru:
+  main:
+    title: "Главная страница"
+    theme: "Тема:"
+    rating: "Оценка"
+    average: "Средняя оценка"
+    no_ratings: "Нет оценок"
+    users_ratings: "Оценки пользователей"
+    rate: "Оценить"
+    back: "← Назад"
+    next: "Вперёд →"
+
+  menu:
+    home: "Главная"
+    about: "О проекте"
+    help: "Помощь"
+    profile: "Моя страница"
+
+  auth:
+    login: "Вход"
+    register: "Регистрация"
+    logout: "Выйти"
+
+  profile:
+    title: "Моя страница"
+    email: "Email"
+    ratings_count: "Количество оценок"
+    good_ratings: "Ваши оценки, близкие к среднему"
+    image: "Изображение"
+    your_rating: "Ваша оценка"
+    average: "Средняя"
+    no_good_ratings: "Ваши оценки существенно расходятся с мнением экспертного сообщества"

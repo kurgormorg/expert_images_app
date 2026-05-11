@@ -1,0 +1,32 @@
+en:
+  main:
+    title: "Main page"
+    theme: "Theme"
+    rating: "Rating"
+    average: "Average rating"
+    no_ratings: "No ratings"
+    users_ratings: "User ratings"
+    rate: "Rate"
+    back: "← Back"
+    next: "Next →"
+
+  menu:
+    home: "Home"
+    about: "About"
+    help: "Help"
+    profile: "My page"
+
+  auth:
+    login: "Login"
+    register: "Sign up"
+    logout: "Logout"
+
+  profile:
+    title: "My page"
+    email: "Email"
+    ratings_count: "Ratings count"
+    good_ratings: "Ratings close to average"
+    image: "Image"
+    your_rating: "Your rating"
+    average: "Average"
+    no_good_ratings: "Your ratings significantly differ from expert community"
